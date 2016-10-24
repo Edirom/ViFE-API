@@ -10,7 +10,7 @@
         "https",
         "http"
     ],
-    "basePath": "/swagger/v1",
+    "basePath": "/api/v1",
     "produces": [
         "application/json"
     ],
