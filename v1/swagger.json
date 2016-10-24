@@ -1,0 +1,71 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "ViFE API",
+        "description": "The API for all projects of the Virtual Research Group Edirom",
+        "version": "1.0.0"
+    },
+    "host": "edirom.de",
+    "schemes": [
+        "https",
+        "http"
+    ],
+    "basePath": "/swagger/v1",
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/documents": {
+            "get": {
+                "summary": "Documents",
+                "description": "The Documents endpoint gives a list of all documents in a repository.\n",
+                "tags": [
+                    "Documents"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array of documents",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Document"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Document": {
+            "type": "object",
+            "properties": {
+                "uri": {
+                    "type": "string",
+                    "description": "Unique identifier representing a specific document"
+                }
+            }
+        },
+        "Error": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "fields": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
