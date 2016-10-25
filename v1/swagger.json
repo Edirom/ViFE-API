@@ -12,7 +12,8 @@
     ],
     "basePath": "/api/v1",
     "produces": [
-        "application/json"
+        "application/json",
+        "application/xml"
     ],
     "paths": {
         "/documents": {
