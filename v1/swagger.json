@@ -2,26 +2,46 @@
     "swagger": "2.0",
     "info": {
         "title": "ViFE API",
-        "description": "The API for all projects of the Virtual Research Group Edirom",
-        "version": "1.0.0"
+        "description": "The OpenAPI documentation for the RESTful interface of ViFE. <br/> (No registration, authentication, or API key is required) <br/> For feedback or requests about this API please contact info@edirom.de or start the discussion at https://github.com/Edirom/ViFE-API",
+        "version": "1.1.0"
     },
     "host": "edirom.de",
     "schemes": [
         "https",
         "http"
     ],
-    "basePath": "/api/v1",
-    "produces": [
-        "application/json",
-        "application/xml"
+    "tags": [
+        {
+            "name": "Documents",
+            "description": "Access to the documents of the digital edition"
+        },
+        {
+            "name": "Code Samples",
+            "description": "Access to encoding features"
+        }
     ],
+    "basePath": "/api/v1",
     "paths": {
         "/documents": {
             "get": {
-                "summary": "Documents",
-                "description": "The Documents endpoint gives a list of all documents in a repository.\n",
+                "summary": "Lists all documents",
+                "description": "The Documents endpoint returns a list of all documents from the digital edition.\n",
                 "tags": [
                     "Documents"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/docTypeParam"
+                    },
+                    {
+                        "$ref": "#/parameters/offsetParam"
+                    },
+                    {
+                        "$ref": "#/parameters/limitParam"
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -30,6 +50,241 @@
                             "type": "array",
                             "items": {
                                 "$ref": "#/definitions/Document"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/documents/{docID}": {
+            "get": {
+                "summary": "Returns documents by ID",
+                "description": "This endpoint returns documents, indicated by an ID.\n",
+                "tags": [
+                    "Documents"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "docID",
+                        "in": "path",
+                        "description": "The document identifier to search for",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array of documents",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Document"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/documents/findByDate": {
+            "get": {
+                "summary": "Finds documents by date",
+                "description": "This endpoint returns a list of documents related to the given date – optionally filtered by document type. \n",
+                "tags": [
+                    "Documents"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "The date to search for",
+                        "type": "string",
+                        "format": "date",
+                        "required": true
+                    },
+                    {
+                        "$ref": "#/parameters/docTypeParam"
+                    },
+                    {
+                        "$ref": "#/parameters/offsetParam"
+                    },
+                    {
+                        "$ref": "#/parameters/limitParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array of documents",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Document"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/documents/findByMention/{docID}": {
+            "get": {
+                "summary": "Finds documents by reference",
+                "description": "This endpoint returns a list of documents that reference a particular docID – optionally filtered by document type. \n",
+                "tags": [
+                    "Documents"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "docID",
+                        "in": "path",
+                        "description": "The document ID that is to be mentioned.\n",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "$ref": "#/parameters/docTypeParam"
+                    },
+                    {
+                        "$ref": "#/parameters/offsetParam"
+                    },
+                    {
+                        "$ref": "#/parameters/limitParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array of documents",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Document"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/documents/findByAuthor/{authorID}": {
+            "get": {
+                "summary": "Finds documents by author",
+                "description": "This endpoint returns a list of documents by a given author – optionally filtered by document type \n",
+                "tags": [
+                    "Documents"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "authorID",
+                        "in": "path",
+                        "description": "The author ID to search for.\n",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "$ref": "#/parameters/docTypeParam"
+                    },
+                    {
+                        "$ref": "#/parameters/offsetParam"
+                    },
+                    {
+                        "$ref": "#/parameters/limitParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array of documents",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Document"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/code/findByElement/{element}": {
+            "get": {
+                "summary": "Finds code samples by XML element",
+                "description": "",
+                "tags": [
+                    "Code Samples"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "element",
+                        "in": "path",
+                        "description": "The XML element to search for",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "namespace",
+                        "in": "query",
+                        "description": "The element namespace. Defaults to the TEI namespace",
+                        "type": "string",
+                        "required": false,
+                        "default": "http://www.tei-c.org/ns/1.0"
+                    },
+                    {
+                        "$ref": "#/parameters/docTypeParam"
+                    },
+                    {
+                        "$ref": "#/parameters/offsetParam"
+                    },
+                    {
+                        "$ref": "#/parameters/limitParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array of documents",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/CodeSample"
                             }
                         }
                     },
@@ -50,6 +305,35 @@
                 "uri": {
                     "type": "string",
                     "description": "Unique identifier representing a specific document"
+                },
+                "docID": {
+                    "type": "string",
+                    "description": "The document identifier representing a specific document"
+                },
+                "docType": {
+                    "type": "string",
+                    "description": "The document type"
+                },
+                "title": {
+                    "type": "string",
+                    "description": "The title of the document"
+                }
+            }
+        },
+        "CodeSample": {
+            "type": "object",
+            "properties": {
+                "uri": {
+                    "type": "string",
+                    "description": "Unique identifier representing a specific document"
+                },
+                "docID": {
+                    "type": "string",
+                    "description": "The document identifier representing a specific document"
+                },
+                "codeSample": {
+                    "type": "string",
+                    "description": "The code snippet"
                 }
             }
         },
@@ -66,6 +350,50 @@
                 "fields": {
                     "type": "string"
                 }
+            }
+        }
+    },
+    "parameters": {
+        "offsetParam": {
+            "name": "offset",
+            "in": "query",
+            "description": "Position of first item to retrieve (starting from 1)",
+            "type": "integer",
+            "format": "int32",
+            "default": 1,
+            "minimum": 1
+        },
+        "limitParam": {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of items to retrieve (200 max)",
+            "type": "integer",
+            "format": "int32",
+            "default": 10,
+            "maximum": 200
+        },
+        "fromDateParam": {
+            "name": "fromDate",
+            "in": "query",
+            "description": "The earliest date",
+            "type": "string",
+            "format": "date"
+        },
+        "toDateParam": {
+            "name": "toDate",
+            "in": "query",
+            "description": "The latest date",
+            "type": "string",
+            "format": "date"
+        },
+        "docTypeParam": {
+            "name": "docType",
+            "in": "query",
+            "description": "The document type",
+            "type": "array",
+            "collectionFormat": "csv",
+            "items": {
+                "type": "string"
             }
         }
     }
